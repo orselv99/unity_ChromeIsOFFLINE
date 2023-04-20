@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -51,12 +52,18 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(1f);
 
             score++;
-            scores[1].text = score.ToString("00000.##");
 
             if (this.highScore < score)
             {
+                this.highScore++;
                 scores[0].text = score.ToString("HI 00000.##");
             }
+            else
+            {
+                scores[0].text = this.highScore.ToString("HI 00000.##");
+            }
+
+            scores[1].text = score.ToString("00000.##");
         }
 
         this.uis[3].SetActive(true);   // 게임오버 & 재시작 표시
@@ -80,6 +87,7 @@ public class GameManager : MonoBehaviour
 
         // 게임 시작
         this.isGameStart = true;
+        this.isGameOver = false;
         StartCoroutine(StartGame());
 
         // 타이머가 끝나면 숨김
@@ -102,6 +110,22 @@ public class GameManager : MonoBehaviour
         
         this.uis[1].SetActive(true);    // 타이머 보이기
         this.uis[2].SetActive(true);    // 스코어 보이기
+
+        // 기존 clone 제거
+        var clones = GameObject.FindGameObjectsWithTag("Clone");
+        foreach (var clone in clones)
+        {
+            DestroyImmediate(clone);
+        }
+
+        // 플레이어 시작위치
+        var player = GameObject.FindGameObjectWithTag("Player");
+        Debug.Log(player.name);
+        player.transform.position = new Vector2(-5f, -2.5f);
+
+        // 스코어 초기화
+        var scores = this.uis[2].GetComponentsInChildren<Text>();
+        scores[1].text = 0.ToString("00000.##");
 
         StartCoroutine(StartTimer());
     }

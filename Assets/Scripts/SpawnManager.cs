@@ -13,6 +13,8 @@ public class SpawnManager : MonoBehaviour
     }
 
     private const float SPAWNED_SPEED = 3f;
+    private const float DESTROY_TIME = 180f;
+    private const string CLONE_TAG = "Clone";
 
     // cloud
     [SerializeField]
@@ -43,17 +45,34 @@ public class SpawnManager : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.instance.isGameOver == true)
+        {
+            var clones = GameObject.FindGameObjectsWithTag("Clone");
+            foreach (var clone in clones)
+            {
+                clone.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            }
+
+            return;
+        }
+
+        if (GameManager.instance.isGameStart == false)
+        {
+            return;
+        }
+
         // cloud
         this.cloudTimer += Time.deltaTime;
         if (this.cloudTimer >= 2f)
         {
             this.cloudTimer = 0f;
             var temp = Instantiate(
-                cloudObject,
+                this.cloudObject,
                 this.cloudPositions[this.cloudPositionIndex].transform.position,
                 this.cloudPositions[this.cloudPositionIndex].transform.rotation);
+            temp.tag = CLONE_TAG;
             temp.GetComponent<Rigidbody2D>().AddForce(Vector2.left * SPAWNED_SPEED, ForceMode2D.Impulse);
-            Destroy(temp, 8f);
+            Destroy(temp, DESTROY_TIME);
 
             this.cloudPositionIndex++;
             if (this.cloudPositionIndex >= this.cloudPositions.Length)
@@ -71,8 +90,9 @@ public class SpawnManager : MonoBehaviour
                 grassObjects[Random.Range(0, grassObjects.Length)],
                 this.grassPosition.transform.position,
                 this.grassPosition.transform.rotation);
+            temp.tag = CLONE_TAG;
             temp.GetComponent<Rigidbody2D>().AddForce(Vector2.left * SPAWNED_SPEED, ForceMode2D.Impulse);
-            Destroy(temp, 8f);
+            Destroy(temp, DESTROY_TIME);
         }
 
         // obstacle
@@ -88,8 +108,9 @@ public class SpawnManager : MonoBehaviour
                 obstacleObjects[Random.Range(0, obstacleObjects.Length)],
                 this.grassPosition.transform.position,
                 this.grassPosition.transform.rotation);
+                temp.tag = CLONE_TAG;
                 temp.GetComponent<Rigidbody2D>().AddForce(Vector2.left * SPAWNED_SPEED, ForceMode2D.Impulse);
-                Destroy(temp, 8f);
+                Destroy(temp, DESTROY_TIME);
             }
             else
             {
@@ -105,6 +126,7 @@ public class SpawnManager : MonoBehaviour
                     obstacleObjects[i],
                     pos,
                     this.grassPosition.transform.rotation);
+                    temp.tag = CLONE_TAG;
                     temp.GetComponent<Rigidbody2D>().AddForce(Vector2.left * SPAWNED_SPEED, ForceMode2D.Impulse);
                     Destroy(temp, 8f);
                 }
@@ -120,8 +142,9 @@ public class SpawnManager : MonoBehaviour
                 stuffObjects[Random.Range(0, stuffObjects.Length)], 
                 this.stuffPosition.transform.position, 
                 this.stuffPosition.transform.rotation);
+            temp.tag = CLONE_TAG;
             temp.GetComponent<Rigidbody2D>().AddForce(Vector2.left * SPAWNED_SPEED, ForceMode2D.Impulse);
-            Destroy(temp, 8f);
+            Destroy(temp, DESTROY_TIME);
         }
     }
 }
