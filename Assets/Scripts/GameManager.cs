@@ -25,22 +25,6 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
-    private void Update()
-    {
-        if (this.isGameStart == true)
-        {
-
-        }
-    }
-
-    private void LateUpdate()
-    {
-        if (this.isGameStart == true)
-        {
-
-        }
-    }
-
     // ui ¿Ã∫•∆Æ
     IEnumerator StartGame()
     {

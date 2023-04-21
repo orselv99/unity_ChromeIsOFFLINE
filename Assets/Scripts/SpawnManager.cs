@@ -118,7 +118,7 @@ public class SpawnManager : MonoBehaviour
                 for (int i = 0; i < 2; i++)
                 {
                     var pos = new Vector3(
-                        posX + i, 
+                        posX + i * 0.5f, 
                         this.grassPosition.transform.position.y, 
                         this.grassPosition.transform.position.z);
 

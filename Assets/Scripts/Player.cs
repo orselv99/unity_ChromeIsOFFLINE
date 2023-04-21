@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
 
         if (GameManager.instance.isGameStart == true)
         {
-            this.rigid.gravityScale = 1f;
+            this.rigid.gravityScale = 1.3f;
 
             if (isLanded == true && Input.GetButtonDown("Jump") == true)
             {
